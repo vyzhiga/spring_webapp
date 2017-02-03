@@ -1,16 +1,24 @@
 package org.duzer.webapp.book.model;
 
 /**
- * Created by duzer on 18.12.2016.
  * Класс библиотечной книги.
  */
 public class Book {
-
     private int idBook;
     private String bookAuthor;
     private String nameBook;
     private String ISBNBook;
     private String bookTaker;
+
+    public Book() {
+    }
+
+    public Book(String bookAuthor, String nameBook, String ISBNBook, String bookTaker) {
+        this.bookAuthor = bookAuthor;
+        this.nameBook = nameBook;
+        this.ISBNBook = ISBNBook;
+        this.bookTaker = bookTaker;
+    }
 
     public int getIdBook() {
         return idBook;

@@ -1,14 +1,19 @@
 package org.duzer.webapp.user.model;
-
 /**
- * Created by duzer on 08.01.2017.
  * Класс пользователя библиотеки
  */
 public class User {
-
     private int userId;
     private String userName;
     private String userPass;
+
+    public User() {
+    }
+
+    public User(String userName, String userPass) {
+        this.userName = userName;
+        this.userPass = userPass;
+    }
 
     public int getUserId() {
         return userId;

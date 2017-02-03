@@ -5,11 +5,16 @@ package org.duzer.webapp.dao;
  */
 
 import org.duzer.webapp.book.model.Book;
+import java.util.List;
 
 public interface BookDAO {
 
-    public String addBook(Book user);
+    public void saveOrUpdate(Book book);
 
     public void deleteBook(int bookId);
+
+    public Book get(int bookId);
+
+    public List<Book> list();
 
 }
