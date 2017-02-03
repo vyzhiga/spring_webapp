@@ -1,5 +1,7 @@
 package org.duzer.webapp.config;
 
+import org.duzer.webapp.book.dao.BookDAO;
+import org.duzer.webapp.book.dao.impl.JdbcBookDAO;
 import org.duzer.webapp.user.dao.UserDAO;
 import org.duzer.webapp.user.dao.impl.JdbcUserDAO;
 import org.springframework.context.annotation.Bean;
@@ -46,6 +48,11 @@ public class MvcConfiguration extends WebMvcConfigurerAdapter {
     @Bean
     public UserDAO getUserDAO() {
         return new JdbcUserDAO(getDataSource());
+    }
+
+    @Bean
+    public BookDAO getBookDAO() {
+        return new JdbcBookDAO(getDataSource());
     }
 
 }
