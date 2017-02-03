@@ -3,114 +3,97 @@ package org.duzer.webapp.book.dao.impl;
 import org.duzer.webapp.book.dao.BookDAO;
 import org.duzer.webapp.book.model.Book;
 import org.duzer.webapp.user.dao.impl.JdbcUserDAO;
+import org.duzer.webapp.user.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.jdbc.core.RowMapper;
+
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
 
 /**
  * Created by duzer on 03.02.2017.
  */
 public class JdbcBookDAO implements BookDAO {
 
-    final static Logger logger = LoggerFactory.getLogger(JdbcUserDAO.class);
-    private DataSource dataSource;
+    final static Logger logger = LoggerFactory.getLogger(JdbcBookDAO.class);
 
-    public String addBook(Book book) {
-        /**
-         * Добавляем книгу. Возвращает 1 - fail, 0 - success.
-         */
-        // для создания подключения к БД
-        Connection con = null;
-        PreparedStatement stmt = null;
-        // кол-во книг с указанным ISBN
-        int numBooks = 0;
-        // результат попытки добавления книги, возвращаемый в JSON
-        String res = "{\"Result\":1}";
-        // строки запросов для preparedStatement
-        // для SELECT
-        String selectSQL = "SELECT COUNT(ISBN) FROM books WHERE ISBN = ?";
-        // для INSERT
-        String insertSQL = "INSERT INTO books(ISBN, author, name) VALUES(?, ?, ?)";
+    private JdbcTemplate jdbcTemplate;
 
-        try {
-            con = dataSource.getConnection();
-            // проверяем количество ниг с добавляемым ISBN. выполняем запрос с параметром
-            stmt = con.prepareStatement(selectSQL);
-            stmt.setString(1, book.getISBNBook());
-            // первый ряд в ResultSet, т.к. COUNT, он должен быть единственный
-            ResultSet rs = stmt.executeQuery();
-            rs.first();
-            numBooks = rs.getInt(1);
-            // пишем в лог
-            logger.debug("Number of books with ISBN '"+ book.getISBNBook() +"' in DB: "+String.valueOf(numBooks));
-
-            if (numBooks==0) {
-                // книги с таким ISBN именем отсутствуют, добавляем
-                // готовим запрос INSERT
-                stmt = con.prepareStatement(insertSQL);
-                // параметры
-                stmt.setString(1, book.getISBNBook());
-                stmt.setString(2, book.getBookAuthor());
-                stmt.setString(3, book.getNameBook());
-                // выполняем
-                stmt.executeUpdate();
-                logger.debug("Added book with ISBN:" + book.getISBNBook() + ", author:" + book.getBookAuthor() + ", name: " + book.getNameBook());
-                stmt.close();
-                res = "{\"Result\":0}";
-            } else {
-                //пользователи существуют, пропускаем
-                logger.debug("Book ISBN: "+ book.getISBNBook() +" already exists. Skipping.");
-            }
-        } catch (Exception e) {
-            logger.error("!!! Error adding a book", e);
-        } finally {
-            closeQuiet(stmt);
-            closeQuiet(con);
-        }
-
-        return res;
-
+    public JdbcBookDAO(DataSource dataSource) {
+        jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
+    @Override
+    public void saveOrUpdate(Book book) {
+
+        if (book.getIdBook()>0) {
+            // обновляем
+            String updateSQL = "UPDATE books SET isbn=?, author=?, name=? WHERE id=?";
+            jdbcTemplate.update(updateSQL, book.getISBNBook(), book.getBookAuthor(), book.getNameBook(), book.getIdBook());
+        } else {
+            // добавляем
+            String insertSQL = "INSERT INTO books (isbn, author, name) VALUES (?, ?, ?)";
+            jdbcTemplate.update(insertSQL, book.getISBNBook(), book.getBookAuthor(), book.getNameBook());
+        }
+    }
+
+    @Override
     public void deleteBook(int bookId) {
-
-        String deleteSQL = "DELETE FROM books WHERE id = ?";
-
-        Connection con = null;
-        PreparedStatement stmt = null;
-
-        try {
-
-            con = dataSource.getConnection();
-            stmt = con.prepareStatement(deleteSQL);
-            stmt.setInt(1, bookId);
-            stmt.executeQuery();
-            logger.debug("Deleted user record with id=" + Integer.toString(bookId));
-            stmt.close();
-
-        } catch (Exception e) {
-
-            logger.error("!!! Del users error", e);
-
-        } finally {
-
-            closeQuiet(stmt);
-            closeQuiet(con);
-
-        }
-
+        String deleteSQL = "DELETE FROM books WHERE id=?";
+        jdbcTemplate.update(deleteSQL, bookId);
     }
 
-    private void closeQuiet(AutoCloseable closeable) {
-        if (closeable != null) {
-            try {
-                closeable.close();
-            } catch (Exception e) {
-                logger.error("!!! Close error", e);
+    @Override
+    public Book get(int bookId) {
+        String selectSQL = "SELECT * FROM books WHERE id=" + bookId;
+        return jdbcTemplate.query(selectSQL, new ResultSetExtractor<Book>() {
+
+            @Override
+            public Book extractData(ResultSet rs) throws SQLException, DataAccessException {
+                if (rs.next()) {
+                    Book book = new Book();
+                    book.setIdBook(rs.getInt("id"));
+                    book.setISBNBook(rs.getString("isbn"));
+                    book.setBookAuthor(rs.getString("author"));
+                    book.setNameBook(rs.getString("name"));
+                    book.setBookTaker(rs.getInt("takerid"));
+                    return book;
+                }
+
+                return null;
             }
-        }
+
+        });
     }
+
+    @Override
+    public List<Book> list() {
+        String selectSQL = "SELECT * FROM books";
+        List<Book> listBook = jdbcTemplate.query(selectSQL, new RowMapper<Book>() {
+
+            @Override
+            public Book mapRow(ResultSet rs, int rowNum) throws SQLException {
+                Book aBook = new Book();
+
+                aBook.setIdBook(rs.getInt("id"));
+                aBook.setISBNBook(rs.getString("isbn"));
+                aBook.setBookAuthor(rs.getString("author"));
+                aBook.setNameBook(rs.getString("name"));
+                aBook.setBookTaker(rs.getInt("takerid"));
+
+                return aBook;
+            }
+        });
+
+        return listBook;
+    }
+
 }
