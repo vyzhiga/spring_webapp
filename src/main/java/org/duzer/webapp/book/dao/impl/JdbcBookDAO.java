@@ -2,25 +2,17 @@ package org.duzer.webapp.book.dao.impl;
 
 import org.duzer.webapp.book.dao.BookDAO;
 import org.duzer.webapp.book.model.Book;
-import org.duzer.webapp.user.dao.impl.JdbcUserDAO;
-import org.duzer.webapp.user.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
-
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-/**
- * Created by duzer on 03.02.2017.
- */
 public class JdbcBookDAO implements BookDAO {
 
     final static Logger logger = LoggerFactory.getLogger(JdbcBookDAO.class);
