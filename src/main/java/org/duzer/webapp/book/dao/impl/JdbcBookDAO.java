@@ -1,7 +1,6 @@
-package org.duzer.webapp.dao.impl;
+package org.duzer.webapp.book.dao.impl;
 
 import org.duzer.webapp.book.model.Book;
-import org.duzer.webapp.dao.BookDAO;
 import org.duzer.webapp.user.dao.impl.JdbcUserDAO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

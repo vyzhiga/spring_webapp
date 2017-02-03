@@ -1,4 +1,4 @@
-package org.duzer.webapp.dao;
+package org.duzer.webapp.book.dao.impl;
 
 /**
  * Created by duzer on 03.02.2017.
