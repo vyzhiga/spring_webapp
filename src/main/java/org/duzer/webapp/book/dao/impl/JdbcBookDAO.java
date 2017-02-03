@@ -1,5 +1,6 @@
 package org.duzer.webapp.book.dao.impl;
 
+import org.duzer.webapp.book.dao.BookDAO;
 import org.duzer.webapp.book.model.Book;
 import org.duzer.webapp.user.dao.impl.JdbcUserDAO;
 import org.slf4j.Logger;
@@ -13,7 +14,6 @@ import java.sql.ResultSet;
  * Created by duzer on 03.02.2017.
  */
 public class JdbcBookDAO implements BookDAO {
-
 
     final static Logger logger = LoggerFactory.getLogger(JdbcUserDAO.class);
     private DataSource dataSource;

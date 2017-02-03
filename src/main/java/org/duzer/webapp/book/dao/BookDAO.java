@@ -1,8 +1,4 @@
-package org.duzer.webapp.book.dao.impl;
-
-/**
- * Created by duzer on 03.02.2017.
- */
+package org.duzer.webapp.book.dao;
 
 import org.duzer.webapp.book.model.Book;
 import java.util.List;
