@@ -17,7 +17,16 @@ public class HelloController{
 
         logger.debug("Returned Hello string");
 
-        return "index";
+        return "redirect:books";
+
+    }
+
+    @RequestMapping(value="/books", method = RequestMethod.GET)
+    public String viewBooks(ModelMap model) {
+
+        logger.debug("Returned Hello string");
+
+        return "books";
 
     }
 
