@@ -21,7 +21,9 @@ public class JdbcUserDAO implements UserDAO {
     }
 
     public String addUser(User user) {
-
+        /**
+         * Добавляем пользователя. Возвращает 1 - fail, 0 - success.
+         */
         // строки запросов для preparedStatement
         // для SELECT
         String selectSQL = "SELECT COUNT (name) FROM users WHERE name = ?";
