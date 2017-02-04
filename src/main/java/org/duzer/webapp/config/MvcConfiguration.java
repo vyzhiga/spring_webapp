@@ -16,25 +16,30 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
-
 import javax.sql.DataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Configuration
 @ComponentScan(basePackages="org.duzer.webapp")
 @EnableWebMvc
 public class MvcConfiguration extends WebMvcConfigurerAdapter {
 
+    final static Logger logger = LoggerFactory.getLogger(MvcConfiguration.class);
+
     @Bean
     public ViewResolver getViewResolver(){
         InternalResourceViewResolver resolver = new InternalResourceViewResolver();
         resolver.setPrefix("/WEB-INF/jsp/");
         resolver.setSuffix(".jsp");
+        logger.debug("Initialized ViewResolver.");
         return resolver;
     }
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
+        logger.debug("Initialized /resources dir.");
     }
 
 /*    @Bean
@@ -55,9 +60,10 @@ public class MvcConfiguration extends WebMvcConfigurerAdapter {
         EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
         EmbeddedDatabase db = builder
                 .setType(EmbeddedDatabaseType.H2) //.H2 or .DERBY
-                .addScript("schema-h2.sql")
-                .addScript("data-h2.sql")
+                .addScript("classpath:schema-h2.sql")
+                .addScript("classpath:data-h2.sql")
                 .build();
+        logger.debug("Initialized DataSource");
         return db;
     }
 
