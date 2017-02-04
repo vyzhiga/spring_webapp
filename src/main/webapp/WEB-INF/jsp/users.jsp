@@ -21,13 +21,16 @@
     <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
     <%-- определяем внешний стиль --%>
-    <link rel="stylesheet" type="text/css" href="/resources/hw.css">
+    <link rel="stylesheet" type="text/css" href="resources/hw.css">
 </head>
 <body>
 
 <%@ include file="/resources/header.jsp"%>
 
-<button type="button" id="opener">Добавить пользователя</button>
+<div style="margin: 5px 0">
+    <button type="button" id="opener">Добавить пользователя</button>
+</div>
+
 <div id="dialog" title="Добавить пользователя">
     Имя пользователя: <input type="text" id="username"><br>
     Пароль: <input type="text" id="password">
