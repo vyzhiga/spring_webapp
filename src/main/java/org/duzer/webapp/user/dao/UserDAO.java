@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface UserDAO {
 
-    public void saveOrUpdate(User user);
+    public String saveOrUpdate(User user);
 
     public void deleteUser(int userId);
 

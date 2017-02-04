@@ -11,8 +11,10 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.support.JdbcDaoSupport;
 
-public class JdbcUserDAO implements UserDAO {
+public class JdbcUserDAO extends JdbcDaoSupport implements UserDAO { //doesn't work
+//public class JdbcUserDAO implements UserDAO { //works
 
     final static Logger logger = LoggerFactory.getLogger(JdbcUserDAO.class);
     private DataSource dataSource;
@@ -24,17 +26,32 @@ public class JdbcUserDAO implements UserDAO {
     }
 
     @Override
-    public void saveOrUpdate(User user) {
+    public String saveOrUpdate(User user) {
+        // возвращает значение: 0 - ок, 1 - фейл
+
+        String res = "{\"Result\":1}";
 
         if (user.getUserId()>0) {
             // обновляем
             String updateSQL = "UPDATE users SET name=?, password=? WHERE id=?";
             jdbcTemplate.update(updateSQL, user.getUserName(), user.getUserPass(), user.getUserId());
+            res = "{\"Result\":0}";
         } else {
             // добавляем
-            String insertSQL = "INSERT INTO users (name, password) VALUES (?, ?)";
-            jdbcTemplate.update(insertSQL, user.getUserName(), user.getUserPass());
+            String selectSQL = "SELECT COUNT(name) FROM users WHERE name = ?";
+            Object[] inputs = new Object[] {user.getUserName()};
+            Integer num = getJdbcTemplate().queryForObject(selectSQL, inputs, Integer.class);
+            if (num == 0) {
+                String insertSQL = "INSERT INTO users (name, password) VALUES (?, ?)";
+                jdbcTemplate.update(insertSQL, user.getUserName(), user.getUserPass());
+                logger.debug("Added user username:password - " + user.getUserName() + ":" + user.getUserPass() + " .");
+                res = "{\"Result\":0}";
+            } else {
+                logger.debug("User "+user.getUserName()+" already exists. Skipping.");
+            }
         }
+
+        return res;
 
     }
 

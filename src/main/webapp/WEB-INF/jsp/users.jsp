@@ -62,7 +62,7 @@
     function jsDeleteUser(userid) {
         var r = confirm("Удалить пользователя с id="+userid +"?");
         if (r == true) {
-            window.location.href = "${pageContext.request.contextPath}/hw/deluser?id="+userid;
+            window.location.href = "${pageContext.request.contextPath}/deluser?id="+userid;
         }
     }
 
@@ -114,7 +114,7 @@
         resizable: false,
         modal: true,
         close: function() {
-            window.location.href = "${pageContext.request.contextPath}/hw/getusers";
+            window.location.href = "${pageContext.request.contextPath}/users";
         }
     });
     //вызов диалога добавления пользователя
@@ -132,8 +132,8 @@
                         var addUser = $("#username").val();
                         var addUserPass = $("#password").val();
                         var dialogExit = false;
-                        if (addUserPass != "") {
-                        $.get("${pageContext.request.contextPath}/hw/adduser?addUser="+addUser+"&addPass="+addUserPass,
+                        if (addUserPass != "" && addUser != "") {
+                        $.get("${pageContext.request.contextPath}/adduser?addUser="+addUser+"&addPass="+addUserPass,
                             function(data) {
                                 if (data.Result == 1) {
                                     alert("Пользователь с именем "+addUser+" уже существует! Укажите другое имя.");
@@ -147,7 +147,7 @@
                                     $("#dialog").dialog("close");
                                 }
                             })
-                        } else {alert("Пароль не может быть пустым!")};
+                        } else {alert("Пароль и пользователь не могут быть пустыми!")};
                     },
                     "Отмена": function() {
                         $(this).dialog("close")
