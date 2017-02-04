@@ -33,7 +33,7 @@ public class HomeController {
     }
 
     // добавляем пользователя
-    @RequestMapping(value = "addUser", method = RequestMethod.GET)
+    @RequestMapping(value = "/adduser", method = RequestMethod.GET)
     public void addUser(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String newUsername = request.getParameter("addUser");
         String newPassword = request.getParameter("addPass");

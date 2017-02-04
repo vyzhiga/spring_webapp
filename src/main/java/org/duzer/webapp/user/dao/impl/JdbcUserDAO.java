@@ -2,11 +2,13 @@ package org.duzer.webapp.user.dao.impl;
 
 import java.sql.*;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 import org.duzer.webapp.user.dao.UserDAO;
 import org.duzer.webapp.user.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
@@ -17,7 +19,13 @@ public class JdbcUserDAO extends JdbcDaoSupport implements UserDAO { //doesn't w
 //public class JdbcUserDAO implements UserDAO { //works
 
     final static Logger logger = LoggerFactory.getLogger(JdbcUserDAO.class);
+    @Autowired
     private DataSource dataSource;
+
+    @PostConstruct
+    private void initialize() {
+        setDataSource(dataSource);
+    }
 
     private JdbcTemplate jdbcTemplate;
 
