@@ -68,9 +68,9 @@
 
     function jsGetUserDetails(userid) {
         //диалог информации о пользователе/смены пароля
-        $.get("${pageContext.request.contextPath}/hw/getuserdetails?userid="+userid,
+        $.get("${pageContext.request.contextPath}/getuserdetails?userid="+userid,
             function(data) {
-                if (data.Result == 1) {
+                if (data.Result == 0) {
                     $("#username").prop("disabled", true);
                     $("#username").val(data.user);
                     $("#password").val(data.pass);
@@ -79,10 +79,11 @@
                             buttons: {
                                 "Изменить пароль": function() {
                                     var UserPass = $("#password").val();
+                                    var UserName = $("#username").val();
                                     if (UserPass != "") {
-                                        $.get("${pageContext.request.contextPath}/hw/updateuserpass?userid="+userid+"&newpass="+UserPass,
+                                        $.get("${pageContext.request.contextPath}/updateuserpass?userid="+userid+"&username="+UserName+"&newpass="+UserPass,
                                             function(data) {
-                                                if (data.Result == 1) {
+                                                if (data.Result == 0) {
                                                     alert("Пароль успешно изменен!");
                                                 } else {
                                                     alert("Ошибка при смене пароля!");

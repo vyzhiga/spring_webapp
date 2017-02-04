@@ -36,7 +36,6 @@ public class JdbcUserDAO extends JdbcDaoSupport implements UserDAO { //doesn't w
     @Override
     public String saveOrUpdate(User user) {
         // возвращает значение: 0 - ок, 1 - фейл
-
         String res = "{\"Result\":1}";
 
         if (user.getUserId()>0) {

@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.duzer.webapp.user.dao.UserDAO;
 import org.duzer.webapp.user.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +49,28 @@ public class HomeController {
         UserDAO.deleteUser(userId);
         logger.debug("Deleted user with id="+userId);
         return new ModelAndView("redirect:/");
+    }
+
+    // данные о пользователе
+    @RequestMapping(value = "/getuserdetails", method = RequestMethod.GET)
+    public void getUserDetails(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        int userId = Integer.parseInt(request.getParameter("userid"));
+        User user = UserDAO.get(userId);
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json");
+        response.getWriter().write("{\"user\":\""+user.getUserName()+"\", \"pass\":\""+user.getUserPass()+"\", \"Result\":0}");
+    }
+
+    // обновляем информацию о пользователе
+    @RequestMapping(value = "/updateuserpass", method = RequestMethod.GET)
+    public void updateUserPass(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        User uUser = new User();
+        uUser.setUserId(Integer.parseInt(request.getParameter("userid")));
+        uUser.setUserName(request.getParameter("username"));
+        uUser.setUserPass(request.getParameter("newpass"));
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json");
+        response.getWriter().write(UserDAO.saveOrUpdate(uUser));
     }
 
 /*    @RequestMapping(value = "/newContact", method = RequestMethod.GET)
