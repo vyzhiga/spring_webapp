@@ -37,10 +37,10 @@ public class MvcConfiguration extends WebMvcConfigurerAdapter {
     @Bean
     public DataSource getDataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-        dataSource.setUrl("jdbc:mysql://localhost:3306/contactdb");
-        dataSource.setUsername("root");
-        dataSource.setPassword("P@ssw0rd");
+        dataSource.setDriverClassName("org.h2.Driver");
+        dataSource.setUrl("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1");
+        dataSource.setUsername("");
+        dataSource.setPassword("");
 
         return dataSource;
     }
