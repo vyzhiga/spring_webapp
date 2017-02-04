@@ -4,18 +4,29 @@ import org.duzer.webapp.book.dao.BookDAO;
 import org.duzer.webapp.book.model.Book;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.support.JdbcDaoSupport;
+import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-public class JdbcBookDAO implements BookDAO {
+public class JdbcBookDAO extends JdbcDaoSupport implements BookDAO {
 
     final static Logger logger = LoggerFactory.getLogger(JdbcBookDAO.class);
+
+    @Autowired
+    private DataSource dataSource;
+
+    @PostConstruct
+    private void initialize() {
+        setDataSource(dataSource);
+    }
 
     private JdbcTemplate jdbcTemplate;
 
@@ -67,8 +78,9 @@ public class JdbcBookDAO implements BookDAO {
     }
 
     @Override
-    public List<Book> list() {
-        String selectSQL = "SELECT * FROM books";
+    public List<Book> list(int offset, int recPerPage, String curOrder, String Order) {
+        String selectSQL = "SELECT B.id AS BookID, B.ISBN AS BookISBN, B.author AS BookAuthor, B.name AS BookName, U.name AS UserName FROM books AS B LEFT JOIN users AS U ON B.takerid = U.id ORDER BY " + curOrder +" "+ Order +", BookISBN LIMIT ? OFFSET ?";
+        //String selectSQL = "SELECT * FROM books";
         List<Book> listBook = jdbcTemplate.query(selectSQL, new RowMapper<Book>() {
 
             @Override

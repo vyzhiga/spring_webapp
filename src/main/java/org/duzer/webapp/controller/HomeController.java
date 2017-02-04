@@ -2,11 +2,18 @@ package org.duzer.webapp.controller;
 
 import java.io.IOException;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import com.sun.javafx.sg.prism.NGShape;
+import org.duzer.webapp.book.dao.BookDAO;
+import org.duzer.webapp.book.model.Book;
 import org.duzer.webapp.user.dao.UserDAO;
 import org.duzer.webapp.user.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,14 +27,49 @@ public class HomeController {
 
     final static Logger logger = LoggerFactory.getLogger(HomeController.class);
 
-    @Autowired
-    private UserDAO UserDAO;
+    @Autowired private UserDAO UserDAO;
 
+    @Autowired private BookDAO BookDAO;
+
+    @Autowired HttpSession session;
+
+    @PostConstruct
+    public void init() {
+        logger.debug("Run init");
+    }
+
+    // страница с пользователями
     @RequestMapping(value={"/", "/users"})
     public ModelAndView listUser(ModelAndView model) throws IOException{
         List<User> listUser = UserDAO.list();
         model.addObject("listUser", listUser);
         model.setViewName("users");
+        return model;
+    }
+
+    // страница с книгами
+    @RequestMapping(value={"/books"})
+    public ModelAndView listBook(ModelAndView model) throws IOException{
+        //List<Book> listBook = BookDAO.list();
+        //model.addObject("listBook", listBook);
+        model.setViewName("books");
+        return model;
+    }
+
+    // отдаем список книг
+    @RequestMapping(value={"/getbooks"})
+    public ModelAndView getBooks(ModelAndView model, HttpServletRequest request, HttpSession session) {
+
+        int pageNum = Integer.parseInt(request.getParameter("page"));
+        int recNum = Integer.parseInt(request.getParameter("recPerPage"));
+
+        String curOrder = (String) session.getAttribute("sesCurOrder");
+        String Order = (String) session.getAttribute("sesOrder");
+
+
+        List<Book> listBook = BookDAO.list((pageNum - 1) * recNum, recNum, curOrder, Order);
+        model.addObject("listBook", listBook);
+        model.setViewName("listBooks");
         return model;
     }
 
@@ -73,26 +115,4 @@ public class HomeController {
         response.getWriter().write(UserDAO.saveOrUpdate(uUser));
     }
 
-/*    @RequestMapping(value = "/newContact", method = RequestMethod.GET)
-    public ModelAndView newContact(ModelAndView model) {
-        Contact newContact = new Contact();
-        model.addObject("contact", newContact);
-        model.setViewName("ContactForm");
-        return model;
-    }
-
-    @RequestMapping(value = "/saveContact", method = RequestMethod.POST)
-    public ModelAndView saveContact(@ModelAttribute Contact contact) {
-        contactDAO.saveOrUpdate(contact);
-        return new ModelAndView("redirect:/");
-    }
-
-    @RequestMapping(value = "/editContact", method = RequestMethod.GET)
-    public ModelAndView editContact(HttpServletRequest request) {
-        int contactId = Integer.parseInt(request.getParameter("id"));
-        Contact contact = contactDAO.get(contactId);
-        ModelAndView model = new ModelAndView("ContactForm");
-        model.addObject("contact", contact);
-        return model;
-    } */
 }

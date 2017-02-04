@@ -11,6 +11,6 @@ public interface BookDAO {
 
     public Book get(int bookId);
 
-    public List<Book> list();
+    public List<Book> list(int offset, int recPerPage, String curOrder, String Order);
 
 }

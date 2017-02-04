@@ -19,8 +19,8 @@ public class JdbcUserDAO extends JdbcDaoSupport implements UserDAO { //doesn't w
 //public class JdbcUserDAO implements UserDAO { //works
 
     final static Logger logger = LoggerFactory.getLogger(JdbcUserDAO.class);
-    @Autowired
-    private DataSource dataSource;
+
+    @Autowired private DataSource dataSource;
 
     @PostConstruct
     private void initialize() {
