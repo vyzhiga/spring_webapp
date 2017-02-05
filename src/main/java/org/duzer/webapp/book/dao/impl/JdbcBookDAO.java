@@ -37,17 +37,30 @@ public class JdbcBookDAO extends JdbcDaoSupport implements BookDAO {
     }
 
     @Override
-    public void saveOrUpdate(Book book) {
+    public String saveOrUpdate(Book book) {
+        // возвращает значение: 0 - ок, 1 - фейл
+        String res = "{\"Result\":1}";
 
         if (book.getIdBook()>0) {
             // обновляем
             String updateSQL = "UPDATE books SET isbn=?, author=?, name=? WHERE id=?";
             jdbcTemplate.update(updateSQL, book.getISBNBook(), book.getBookAuthor(), book.getNameBook(), book.getIdBook());
+            res = "{\"Result\":0}";
         } else {
             // добавляем
-            String insertSQL = "INSERT INTO books (isbn, author, name) VALUES (?, ?, ?)";
-            jdbcTemplate.update(insertSQL, book.getISBNBook(), book.getBookAuthor(), book.getNameBook());
+            String selectSQL = "SELECT COUNT(isbn) FROM books WHERE isbn = ?";
+            Object[] inputs = new Object[] {book.getISBNBook()};
+            Integer num = getJdbcTemplate().queryForObject(selectSQL, inputs, Integer.class);
+            if (num == 0) {
+                String insertSQL = "INSERT INTO books (isbn, author, name) VALUES (?, ?, ?)";
+                jdbcTemplate.update(insertSQL, book.getISBNBook(), book.getBookAuthor(), book.getNameBook());
+                res = "{\"Result\":0}";
+            } else {
+                logger.debug("Book "+book.getISBNBook()+" already exists. Skipping addition.");
+            }
         }
+
+        return res;
     }
 
     @Override

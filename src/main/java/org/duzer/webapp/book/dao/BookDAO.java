@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface BookDAO {
 
-    public void saveOrUpdate(Book book);
+    public String saveOrUpdate(Book book);
 
     public void deleteBook(int bookId);
 

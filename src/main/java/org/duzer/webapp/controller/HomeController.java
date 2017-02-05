@@ -85,13 +85,25 @@ public class HomeController {
         response.getWriter().write(UserDAO.saveOrUpdate(newUser));
     }
 
+    // добавляем книгу
+    @RequestMapping(value = "/addbook", method = RequestMethod.GET)
+    public void addBook(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String newISBN = request.getParameter("newISBN");
+        String newAuthor = request.getParameter("newAuthor");
+        String newName = request.getParameter("newName");
+        Book newBook = new Book(newAuthor, newName, newISBN, "");
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json");
+        response.getWriter().write(BookDAO.saveOrUpdate(newBook));
+    }
+
     // удаляем книгу
     @RequestMapping(value = "/delbook", method = RequestMethod.GET)
     public ModelAndView deleteBook(HttpServletRequest request) {
         int bookId = Integer.parseInt(request.getParameter("idDelBook"));
         BookDAO.deleteBook(bookId);
         logger.debug("Deleted book with id="+bookId);
-        return new ModelAndView("redirect:/users    x");
+        return new ModelAndView("redirect:/users");
     }
 
     // удаляем пользователя

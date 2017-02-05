@@ -54,12 +54,11 @@ public class JdbcUserDAO extends JdbcDaoSupport implements UserDAO { //doesn't w
                 logger.debug("Added user username:password - " + user.getUserName() + ":" + user.getUserPass() + " .");
                 res = "{\"Result\":0}";
             } else {
-                logger.debug("User "+user.getUserName()+" already exists. Skipping.");
+                logger.debug("User "+user.getUserName()+" already exists. Skipping addition.");
             }
         }
 
         return res;
-
     }
 
     @Override
