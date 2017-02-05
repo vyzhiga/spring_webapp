@@ -40,7 +40,7 @@ public class HomeController {
 
     // страница с пользователями
     @RequestMapping(value={"/", "/users"})
-    public ModelAndView listUser(ModelAndView model) throws IOException{
+    public ModelAndView listUser(ModelAndView model) throws IOException {
         List<User> listUser = UserDAO.list();
         model.addObject("listUser", listUser);
         model.setViewName("users");
@@ -49,7 +49,7 @@ public class HomeController {
 
     // страница с книгами
     @RequestMapping(value={"/books"})
-    public ModelAndView listBook(ModelAndView model) throws IOException{
+    public ModelAndView listBook(ModelAndView model) throws IOException {
         //List<Book> listBook = BookDAO.list();
         //model.addObject("listBook", listBook);
         model.setViewName("books");
@@ -160,4 +160,10 @@ public class HomeController {
         response.getWriter().write(BookDAO.saveOrUpdate(uBook));
     }
 
+    // дебаг пользователей
+    @RequestMapping(value = "/usersdebug", method = RequestMethod.GET)
+    public ModelAndView showUsersDebug(ModelAndView model) throws IOException {
+        model.setViewName("usersdebug");
+        return model;
+    }
 }
