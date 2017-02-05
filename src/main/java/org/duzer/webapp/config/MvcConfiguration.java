@@ -20,7 +20,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Configuration
-@ComponentScan(basePackages="org.duzer.webapp")
+//@ComponentScan(basePackages="org.duzer.webapp")
+@ComponentScan("org.duzer.webapp")
 @EnableWebMvc
 public class MvcConfiguration extends WebMvcConfigurerAdapter {
 
