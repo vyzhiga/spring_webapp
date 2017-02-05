@@ -8,12 +8,12 @@ public class Book {
     private String bookAuthor;
     private String nameBook;
     private String ISBNBook;
-    private int bookTaker;
+    private String bookTaker;
 
     public Book() {
     }
 
-    public Book(String bookAuthor, String nameBook, String ISBNBook, int bookTaker) {
+    public Book(String bookAuthor, String nameBook, String ISBNBook, String bookTaker) {
         this.bookAuthor = bookAuthor;
         this.nameBook = nameBook;
         this.ISBNBook = ISBNBook;
@@ -44,11 +44,11 @@ public class Book {
         this.ISBNBook = ISBNBook;
     }
 
-    public int getBookTaker() {
+    public String getBookTaker() {
         return bookTaker;
     }
 
-    public void setBookTaker(int bookTaker) {
+    public void setBookTaker(String bookTaker) {
         this.bookTaker = bookTaker;
     }
 

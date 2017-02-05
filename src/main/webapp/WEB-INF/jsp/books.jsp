@@ -161,7 +161,7 @@
     function jsDeleteBook(bookid) {
         var r = confirm("Удалить книгу с id="+bookid +"?");
         if (r == true) {
-            $.get("${pageContext.request.contextPath}/hw/delbook?idDelBook="+bookid)
+            $.get("${pageContext.request.contextPath}/delbook?idDelBook="+bookid)
                 .done(function() {
                     location.reload();
                 })
@@ -189,7 +189,6 @@
         resizable: false,
         modal: true,
         close: function() {
-            //window.location.href = "${pageContext.request.contextPath}/hw/getusers";
             location.reload();
         }
     });
@@ -254,7 +253,7 @@
                         var name = $("#name").val();
                         var dialogExit = false;
                         if (isbn != "" && author != "" && name != "") {
-                            $.get("${pageContext.request.contextPath}/hw/addbook?newISBN="+isbn+"&newAuthor="+author+"&newName="+name,
+                            $.get("${pageContext.request.contextPath}/addbook?newISBN="+isbn+"&newAuthor="+author+"&newName="+name,
                                 function(data) {
                                     if (data.Result == 1) {
                                         alert("Книга с ISBN " + isbn + " уже существует! Укажите другой ISBN.");

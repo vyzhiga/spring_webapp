@@ -24,21 +24,20 @@ public class Filter implements javax.servlet.Filter {
         String param = (String) session.getAttribute("sesCurOrder");
         if (param == null) {
             session.setAttribute("sesCurOrder", "BookAuthor");
-            logger.debug("Filter: null session parameter sesCurOrder in user-session. Set it to 'BookAuthor'");
-            logger.debug("Filter: Test: sesCurOrder is "+((String) session.getAttribute("sesCurOrder")));
+            logger.debug("Null session parameter sesCurOrder in user-session. Set it to 'BookAuthor'");
+            logger.debug("Test: sesCurOrder is "+((String) session.getAttribute("sesCurOrder")));
         } else {
-            logger.debug("Filter: sesCurOrder is "+((String) session.getAttribute("sesCurOrder")));
+            logger.debug("sesCurOrder is "+((String) session.getAttribute("sesCurOrder")));
         }
 
         // проверяем и устанавливаем параметр сессии - порядок отображения столбца авторов или наименований
         param = (String) session.getAttribute("sesOrder");
         if (param == null) {
             session.setAttribute("sesOrder", "ASC");
-            logger.debug("Filter: null session parameter sesOrder in user-session. Set it to 'ASC'");
+            logger.debug("Null session parameter sesOrder in user-session. Set it to 'ASC'");
         } else {
-            logger.debug("Filter: sesOrder is "+((String) session.getAttribute("sesOrder")));
+            logger.debug("sesOrder is "+((String) session.getAttribute("sesOrder")));
         }
-
         // передаем дальше
         chain.doFilter(req, res);
     }

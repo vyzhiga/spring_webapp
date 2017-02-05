@@ -14,7 +14,9 @@ import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class JdbcBookDAO extends JdbcDaoSupport implements BookDAO {
 
@@ -67,37 +69,45 @@ public class JdbcBookDAO extends JdbcDaoSupport implements BookDAO {
                     book.setISBNBook(rs.getString("isbn"));
                     book.setBookAuthor(rs.getString("author"));
                     book.setNameBook(rs.getString("name"));
-                    book.setBookTaker(rs.getInt("takerid"));
+                    book.setBookTaker(rs.getString("takerid"));
                     return book;
                 }
-
                 return null;
             }
-
         });
     }
 
     @Override
     public List<Book> list(int offset, int recPerPage, String curOrder, String Order) {
-        String selectSQL = "SELECT B.id AS BookID, B.ISBN AS BookISBN, B.author AS BookAuthor, B.name AS BookName, U.name AS UserName FROM books AS B LEFT JOIN users AS U ON B.takerid = U.id ORDER BY " + curOrder +" "+ Order +", BookISBN LIMIT ? OFFSET ?";
+        //String selectSQL = "SELECT B.id AS BookID, B.ISBN AS BookISBN, B.author AS BookAuthor, B.name AS BookName, U.name AS UserName FROM books AS B LEFT JOIN users AS U ON B.takerid = U.id ORDER BY " + curOrder +" "+ Order +", BookISBN LIMIT ? OFFSET ?";
+
+        String selectSQL = "SELECT B.id AS BookID, B.ISBN AS BookISBN, B.author AS BookAuthor, B.name AS BookName, U.name AS UserName FROM books AS B LEFT JOIN users AS U ON B.takerid = U.id ORDER BY BookAuthor ASC, BookISBN LIMIT ? OFFSET ?";
+        //String selectSQL = "SELECT B.id AS id, B.isbn AS isbn, B.author AS author, B.name AS name, U.name AS UserName FROM books AS B LEFT JOIN users AS U ON B.takerid = U.id ORDER BY author ASC, isbn LIMIT ? OFFSET ?";
         //String selectSQL = "SELECT * FROM books";
-        List<Book> listBook = jdbcTemplate.query(selectSQL, new RowMapper<Book>() {
+        Object[] inputs = new Object[] {recPerPage, offset};
+        List<Book> listBook = jdbcTemplate.query(selectSQL, inputs, new RowMapper<Book>() {
+        //List<Book> listBook = jdbcTemplate.query(selectSQL, new RowMapper<Book>() {
 
             @Override
             public Book mapRow(ResultSet rs, int rowNum) throws SQLException {
                 Book aBook = new Book();
 
-                aBook.setIdBook(rs.getInt("id"));
+/*                aBook.setIdBook(rs.getInt("id"));
                 aBook.setISBNBook(rs.getString("isbn"));
                 aBook.setBookAuthor(rs.getString("author"));
                 aBook.setNameBook(rs.getString("name"));
                 aBook.setBookTaker(rs.getInt("takerid"));
+*/
+
+                aBook.setIdBook(rs.getInt("BookID"));
+                aBook.setISBNBook(rs.getString("BookISBN"));
+                aBook.setBookAuthor(rs.getString("BookAuthor"));
+                aBook.setNameBook(rs.getString("BookName"));
+                aBook.setBookTaker(rs.getString("UserName"));
 
                 return aBook;
             }
         });
-
         return listBook;
     }
-
 }

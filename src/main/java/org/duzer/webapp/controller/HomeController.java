@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 @Controller
 public class HomeController {
 
-    final static Logger logger = LoggerFactory.getLogger(HomeController.class);
+    final private static Logger logger = LoggerFactory.getLogger(HomeController.class);
 
     @Autowired private UserDAO UserDAO;
 
@@ -66,6 +66,7 @@ public class HomeController {
         String curOrder = (String) session.getAttribute("sesCurOrder");
         String Order = (String) session.getAttribute("sesOrder");
 
+        logger.debug("Controller: calling BookDAO.list("+((pageNum - 1) * recNum)+", "+recNum+", "+curOrder+","+Order+")");
 
         List<Book> listBook = BookDAO.list((pageNum - 1) * recNum, recNum, curOrder, Order);
         model.addObject("listBook", listBook);
@@ -82,6 +83,15 @@ public class HomeController {
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json");
         response.getWriter().write(UserDAO.saveOrUpdate(newUser));
+    }
+
+    // удаляем книгу
+    @RequestMapping(value = "/delbook", method = RequestMethod.GET)
+    public ModelAndView deleteBook(HttpServletRequest request) {
+        int bookId = Integer.parseInt(request.getParameter("idDelBook"));
+        BookDAO.deleteBook(bookId);
+        logger.debug("Deleted book with id="+bookId);
+        return new ModelAndView("redirect:/users    x");
     }
 
     // удаляем пользователя
