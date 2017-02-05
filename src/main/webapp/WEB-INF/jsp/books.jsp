@@ -105,7 +105,7 @@
     function jsSetAuthorOrder() {
         // меняем сортировку при клике по заголовку столбца с автором книги
         numPage = 1;
-        $.get("${pageContext.request.contextPath}/hw/setauthororder")
+        $.get("${pageContext.request.contextPath}/setauthororder")
             .done(function() {
                 // очищаем таблицу. селектор id таблицы и все элементы tbody внутри этой таблицы
                 $("#emptytbody ~ tbody").remove();
@@ -132,7 +132,7 @@
     function jsSetNameOrder() {
         // меняем сортировку при клике по заголовку столбца с названием книги
         numPage = 1;
-        $.get("${pageContext.request.contextPath}/hw/setnameorder")
+        $.get("${pageContext.request.contextPath}/setnameorder")
             .done(function() {
                 // очищаем таблицу. селектор id таблицы и все элементы tbody внутри этой таблицы
                 $("#emptytbody ~ tbody").remove();

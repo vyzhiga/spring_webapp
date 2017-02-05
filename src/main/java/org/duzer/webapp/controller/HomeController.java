@@ -182,6 +182,68 @@ public class HomeController {
         return new ModelAndView("redirect:/books");
     }
 
+    // сортировка по автору
+    @RequestMapping(value = "/setauthororder", method = RequestMethod.GET)
+    private void setAuthorOrder() {
+        logger.debug("Calling setAuthorOrder()");
+        if (((String) session.getAttribute("sesCurOrder")).equals("BookAuthor")) {
+            // устанавливаем параметр сессии, содержащий порядок отображения авторов книг
+            logger.debug("Sorting column is Author, sesOrder is '" + ((String) session.getAttribute("sesOrder")) + "'");
+            switch ((String) session.getAttribute("sesOrder")) {
+                // был порядок возрасатющий - делаем убывающий
+                case "ASC":
+                    session.setAttribute("sesOrder", "DESC");
+                    logger.debug("Set column=Author sesOrder to DESC.");
+                    break;
+                // наоборот
+                case "DESC":
+                    session.setAttribute("sesOrder", "ASC");
+                    logger.debug("Set column=Author sesOrder to ASC.");
+                    break;
+                // заглушка, на всякий случай
+                default:
+                    session.setAttribute("sesOrder", "ASC");
+                    logger.debug("Dummy has worked! Set column=Author sesAuthorOrder to ASC.");
+                    break;
+            }
+        } else {
+            session.setAttribute("sesCurOrder", "BookAuthor");
+            session.setAttribute("sesOrder", "ASC");
+            logger.debug("Set column=Author sesOrder to ASC.");
+        }
+    }
+
+    // сортировка по названию
+    @RequestMapping(value = "/setnameorder", method = RequestMethod.GET)
+    private void setNameOrder() {
+        logger.debug("Calling setNameOrder()");
+        if (((String) session.getAttribute("sesCurOrder")).equals("BookName")) {
+            // устанавливаем параметр сессии, содержащий порядок отображения наименований книг
+            logger.debug("Sorting column is Name, sesOrder is '" + ((String) session.getAttribute("sesNameOrder")) + "'");
+            switch ((String) session.getAttribute("sesOrder")) {
+                // был порядок возрасатющий - делаем убывающий
+                case "ASC":
+                    session.setAttribute("sesOrder", "DESC");
+                    logger.debug("Set column=Name sesOrder to DESC.");
+                    break;
+                // наоборот
+                case "DESC":
+                    session.setAttribute("sesOrder", "ASC");
+                    logger.debug("Set column=Name sesOrder to ASC.");
+                    break;
+                // заглушка, на всякий случай
+                default:
+                    session.setAttribute("sesOrder", "ASC");
+                    logger.debug("Dummy has worked! Set column=Name sesOrder to ASC.");
+                    break;
+            }
+        } else {
+            session.setAttribute("sesCurOrder", "BookName");
+            session.setAttribute("sesOrder", "ASC");
+            logger.debug("Set column=Name sesOrder to ASC.");
+        }
+    }
+
     // дебаг пользователей
     @RequestMapping(value = "/usersdebug", method = RequestMethod.GET)
     public ModelAndView showUsersDebug(ModelAndView model) throws IOException {
