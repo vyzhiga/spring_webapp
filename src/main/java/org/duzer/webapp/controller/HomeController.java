@@ -7,13 +7,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.sun.javafx.sg.prism.NGShape;
 import org.duzer.webapp.book.dao.BookDAO;
 import org.duzer.webapp.book.model.Book;
 import org.duzer.webapp.user.dao.UserDAO;
 import org.duzer.webapp.user.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,7 +37,7 @@ public class HomeController {
     }
 
     // страница с пользователями
-    @RequestMapping(value={"/", "/users"})
+    @RequestMapping(value={"/users"})
     public ModelAndView listUser(ModelAndView model) throws IOException {
         List<User> listUser = UserDAO.list();
         model.addObject("listUser", listUser);
@@ -48,7 +46,7 @@ public class HomeController {
     }
 
     // страница с книгами
-    @RequestMapping(value={"/books"})
+    @RequestMapping(value={"/", "/books"})
     public ModelAndView listBook(ModelAndView model) throws IOException {
         //List<Book> listBook = BookDAO.list();
         //model.addObject("listBook", listBook);
@@ -184,7 +182,7 @@ public class HomeController {
 
     // сортировка по автору
     @RequestMapping(value = "/setauthororder", method = RequestMethod.GET)
-    private void setAuthorOrder() {
+    private void setAuthorOrder(HttpServletResponse response) throws IOException {
         logger.debug("Calling setAuthorOrder()");
         if (((String) session.getAttribute("sesCurOrder")).equals("BookAuthor")) {
             // устанавливаем параметр сессии, содержащий порядок отображения авторов книг
@@ -215,7 +213,7 @@ public class HomeController {
 
     // сортировка по названию
     @RequestMapping(value = "/setnameorder", method = RequestMethod.GET)
-    private void setNameOrder() {
+        private void setNameOrder(HttpServletResponse response) {
         logger.debug("Calling setNameOrder()");
         if (((String) session.getAttribute("sesCurOrder")).equals("BookName")) {
             // устанавливаем параметр сессии, содержащий порядок отображения наименований книг

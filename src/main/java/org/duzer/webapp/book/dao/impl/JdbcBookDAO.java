@@ -1,5 +1,6 @@
 package org.duzer.webapp.book.dao.impl;
 
+import com.sun.org.apache.xpath.internal.operations.Or;
 import org.duzer.webapp.book.dao.BookDAO;
 import org.duzer.webapp.book.model.Book;
 import org.slf4j.Logger;
@@ -102,7 +103,8 @@ public class JdbcBookDAO extends JdbcDaoSupport implements BookDAO {
     @Override
     public List<Book> list(int offset, int recPerPage, String curOrder, String Order) {
 
-        String selectSQL = "SELECT B.id AS BookID, B.ISBN AS BookISBN, B.author AS BookAuthor, B.name AS BookName, U.name AS UserName FROM books AS B LEFT JOIN users AS U ON B.takerid = U.id ORDER BY BookAuthor ASC, BookISBN LIMIT ? OFFSET ?";
+        String selectSQL = "SELECT B.id AS BookID, B.ISBN AS BookISBN, B.author AS BookAuthor, B.name AS BookName, U.name AS UserName FROM books AS B LEFT JOIN users AS U ON B.takerid = U.id ORDER BY " + curOrder +" "+ Order +", BookISBN LIMIT ? OFFSET ?";
+        logger.debug(selectSQL);
         Object[] inputs = new Object[] {recPerPage, offset};
         List<Book> listBook = jdbcTemplate.query(selectSQL, inputs, new RowMapper<Book>() {
 
