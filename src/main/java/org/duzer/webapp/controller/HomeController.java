@@ -125,6 +125,12 @@ public class HomeController {
         response.getWriter().write("{\"user\":\""+user.getUserName()+"\", \"pass\":\""+user.getUserPass()+"\", \"Result\":0}");
     }
 
+    // данные о книге
+    @RequestMapping(value = "/getbookdetails", method = RequestMethod.GET)
+    public void getBookDetails(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+    }
+
     // обновляем информацию о пользователе
     @RequestMapping(value = "/updateuserpass", method = RequestMethod.GET)
     public void updateUserPass(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -135,6 +141,12 @@ public class HomeController {
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json");
         response.getWriter().write(UserDAO.saveOrUpdate(uUser));
+    }
+
+    // обновляем информацию о книге
+    @RequestMapping(value = "/updatebookdetails", method = RequestMethod.GET)
+    public void updateBookDetails(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
     }
 
 }

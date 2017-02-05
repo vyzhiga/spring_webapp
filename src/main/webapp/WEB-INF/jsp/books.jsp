@@ -195,9 +195,9 @@
 
     function jsGetBookDetails(bookid) {
         //диалог с возможностью редактирования информации о книге
-        $.get("${pageContext.request.contextPath}/hw/getbookdetails?bookid="+bookid,
+        $.get("${pageContext.request.contextPath}/getbookdetails?bookid="+bookid,
             function(data) {
-                if (data.Result == 1) {
+                if (data.Result == 0) {
                     $("#isbn").prop("disabled", true);
                     $("#isbn").val(data.ISBN);
                     $("#author").val(data.author);
@@ -209,7 +209,7 @@
                                     var newAuthor = $("#author").val();
                                     var newName = $("#name").val();
                                     if (newAuthor != "" && newName != "") {
-                                        $.get("${pageContext.request.contextPath}/hw/updatebookdetails?bookid="+bookid+"&newAuthor="+newAuthor+"&newName="+newName,
+                                        $.get("${pageContext.request.contextPath}/updatebookdetails?bookid="+bookid+"&newAuthor="+newAuthor+"&newName="+newName,
                                             function(data) {
                                                 if (data.Result == 1) {
                                                     alert("В данные книги внесены изменения!");
