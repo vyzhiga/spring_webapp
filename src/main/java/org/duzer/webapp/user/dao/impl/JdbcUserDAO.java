@@ -91,6 +91,27 @@ public class JdbcUserDAO extends JdbcDaoSupport implements UserDAO { //doesn't w
     }
 
     @Override
+    public User getByName(String userName) {
+        String selectSQL = "SELECT * FROM users WHERE name=" + userName;
+        return jdbcTemplate.query(selectSQL, new ResultSetExtractor<User>() {
+
+            @Override
+            public User extractData(ResultSet rs) throws SQLException, DataAccessException {
+                if (rs.next()) {
+                    User user = new User();
+                    user.setUserId(rs.getInt("id"));
+                    user.setUserName(rs.getString("name"));
+                    user.setUserPass(rs.getString("password"));
+                    return user;
+                }
+
+                return null;
+            }
+
+        });
+    }
+
+    @Override
     public List<User> list() {
         String selectSQL = "SELECT * FROM users";
         List<User> listUser = jdbcTemplate.query(selectSQL, new RowMapper<User>() {

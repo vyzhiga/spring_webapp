@@ -163,7 +163,7 @@
         if (r == true) {
             $.get("${pageContext.request.contextPath}/delbook?idDelBook="+bookid)
                 .done(function() {
-                    location.reload();
+                    window.location.href = "${pageContext.request.contextPath}/books"
                 })
         }
     }
@@ -176,9 +176,9 @@
         console.log("bookid", bookid);
         console.log("action", action);
         console.log("username", username);
-        $.get("${pageContext.request.contextPath}/hw/changetaker?bookid="+bookid+"&action="+action+"&username="+username)
+        $.get("${pageContext.request.contextPath}/changetaker?bookid="+bookid+"&action="+action+"&username="+username)
             .done(function() {
-                location.reload();
+                window.location.href = "${pageContext.request.contextPath}/books"
             })
     }
 

@@ -14,9 +14,7 @@ import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class JdbcBookDAO extends JdbcDaoSupport implements BookDAO {
 
@@ -41,24 +39,35 @@ public class JdbcBookDAO extends JdbcDaoSupport implements BookDAO {
         // возвращает значение: 0 - ок, 1 - фейл
         String res = "{\"Result\":1}";
 
-        if (book.getIdBook()>0) {
+        logger.debug("JdbcBookDAO.saveOrUpdate book.getBookTaker() - "+book.getBookTaker());
+
+        if (book.getIdBook()>0 && book.getBookTaker()== null) {
             // обновляем
             String updateSQL = "UPDATE books SET isbn=?, author=?, name=? WHERE id=?";
             jdbcTemplate.update(updateSQL, book.getISBNBook(), book.getBookAuthor(), book.getNameBook(), book.getIdBook());
             res = "{\"Result\":0}";
-        } else {
-            // добавляем
-            String selectSQL = "SELECT COUNT(isbn) FROM books WHERE isbn = ?";
-            Object[] inputs = new Object[] {book.getISBNBook()};
-            Integer num = getJdbcTemplate().queryForObject(selectSQL, inputs, Integer.class);
-            if (num == 0) {
-                String insertSQL = "INSERT INTO books (isbn, author, name) VALUES (?, ?, ?)";
-                jdbcTemplate.update(insertSQL, book.getISBNBook(), book.getBookAuthor(), book.getNameBook());
-                res = "{\"Result\":0}";
+        } else if (book.getIdBook()>0 && book.getBookTaker()!= null) {
+            if (book.getBookTaker() == "") {
+                String updateSQL = "UPDATE books SET takerid=NULL WHERE id=?";
+                jdbcTemplate.update(updateSQL, book.getIdBook());
             } else {
-                logger.debug("Book "+book.getISBNBook()+" already exists. Skipping addition.");
+                String updateSQL = "UPDATE books SET takerid=(SELECT id FROM users WHERE name = ?) WHERE id =? ";
+                jdbcTemplate.update(updateSQL, book.getBookTaker(), book.getIdBook());
             }
-        }
+            res = "{\"Result\":0}";
+        } else {
+                // добавляем
+                String selectSQL = "SELECT COUNT(isbn) FROM books WHERE isbn = ?";
+                Object[] inputs = new Object[] {book.getISBNBook()};
+                Integer num = getJdbcTemplate().queryForObject(selectSQL, inputs, Integer.class);
+                if (num == 0) {
+                    String insertSQL = "INSERT INTO books (isbn, author, name) VALUES (?, ?, ?)";
+                    jdbcTemplate.update(insertSQL, book.getISBNBook(), book.getBookAuthor(), book.getNameBook());
+                    res = "{\"Result\":0}";
+                } else {
+                    logger.debug("Book "+book.getISBNBook()+" already exists. Skipping addition.");
+                }
+            }
 
         return res;
     }
@@ -92,25 +101,14 @@ public class JdbcBookDAO extends JdbcDaoSupport implements BookDAO {
 
     @Override
     public List<Book> list(int offset, int recPerPage, String curOrder, String Order) {
-        //String selectSQL = "SELECT B.id AS BookID, B.ISBN AS BookISBN, B.author AS BookAuthor, B.name AS BookName, U.name AS UserName FROM books AS B LEFT JOIN users AS U ON B.takerid = U.id ORDER BY " + curOrder +" "+ Order +", BookISBN LIMIT ? OFFSET ?";
 
         String selectSQL = "SELECT B.id AS BookID, B.ISBN AS BookISBN, B.author AS BookAuthor, B.name AS BookName, U.name AS UserName FROM books AS B LEFT JOIN users AS U ON B.takerid = U.id ORDER BY BookAuthor ASC, BookISBN LIMIT ? OFFSET ?";
-        //String selectSQL = "SELECT B.id AS id, B.isbn AS isbn, B.author AS author, B.name AS name, U.name AS UserName FROM books AS B LEFT JOIN users AS U ON B.takerid = U.id ORDER BY author ASC, isbn LIMIT ? OFFSET ?";
-        //String selectSQL = "SELECT * FROM books";
         Object[] inputs = new Object[] {recPerPage, offset};
         List<Book> listBook = jdbcTemplate.query(selectSQL, inputs, new RowMapper<Book>() {
-        //List<Book> listBook = jdbcTemplate.query(selectSQL, new RowMapper<Book>() {
 
             @Override
             public Book mapRow(ResultSet rs, int rowNum) throws SQLException {
                 Book aBook = new Book();
-
-/*                aBook.setIdBook(rs.getInt("id"));
-                aBook.setISBNBook(rs.getString("isbn"));
-                aBook.setBookAuthor(rs.getString("author"));
-                aBook.setNameBook(rs.getString("name"));
-                aBook.setBookTaker(rs.getInt("takerid"));
-*/
 
                 aBook.setIdBook(rs.getInt("BookID"));
                 aBook.setISBNBook(rs.getString("BookISBN"));

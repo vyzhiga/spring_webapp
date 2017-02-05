@@ -11,5 +11,7 @@ public interface UserDAO {
 
     public User get(int userId);
 
+    public User getByName(String userName);
+
     public List<User> list();
 }

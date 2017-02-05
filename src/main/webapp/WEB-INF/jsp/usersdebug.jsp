@@ -15,17 +15,17 @@
 </head>
 <body>
 
-    <%@ include file="header.jsp"%>
+    <%@ include file="/resources/header.jsp"%>
 
     <sql:setDataSource var="h2db" driver="org.h2.Driver"
-                       url="jdbc:h2:mem:test;DB_CLOSE_DELAY=-1"
-                       user=""  password=""/>
+                       url="jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1"
+                       user="sa"  password=""/>
 
     <sql:query dataSource="${h2db}" var="result">
         SELECT id, name FROM users;
     </sql:query>
 
-    <form action="${pageContext.request.contextPath}/hw/setuser" method="get">
+    <form action="${pageContext.request.contextPath}/setdebuguser" method="get">
         <fieldset>
             <legend>Select user:</legend>
             User:

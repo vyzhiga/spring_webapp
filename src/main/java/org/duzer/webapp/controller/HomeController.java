@@ -103,7 +103,7 @@ public class HomeController {
         int bookId = Integer.parseInt(request.getParameter("idDelBook"));
         BookDAO.deleteBook(bookId);
         logger.debug("Deleted book with id="+bookId);
-        return new ModelAndView("redirect:/users");
+        return new ModelAndView("redirect:/books");
     }
 
     // удаляем пользователя
@@ -112,7 +112,7 @@ public class HomeController {
         int userId = Integer.parseInt(request.getParameter("id"));
         UserDAO.deleteUser(userId);
         logger.debug("Deleted user with id="+userId);
-        return new ModelAndView("redirect:/");
+        return new ModelAndView("redirect:/users");
     }
 
     // данные о пользователе
@@ -160,9 +160,39 @@ public class HomeController {
         response.getWriter().write(BookDAO.saveOrUpdate(uBook));
     }
 
+    // взять/вернуть книгу
+    @RequestMapping(value = "/changetaker", method = RequestMethod.GET)
+    public ModelAndView changeTaker(HttpServletRequest request) {
+        // bookid - id книги
+        // action - действие, 1 - взять, 0 - вернуть
+        // username - имя "текущего" пользователя
+        int bookId = Integer.parseInt(request.getParameter("bookid"));
+        Book book = BookDAO.get(bookId);
+        String userName = request.getParameter("username");
+        int action = Integer.parseInt(request.getParameter("action"));
+        logger.debug("Controller changeTaker() Action: "+action+", bookid: "+bookId+", username: "+userName);
+        if (action == 0) {
+            book.setBookTaker("");
+        } else if (action == 1) {
+            book.setBookTaker(userName);
+        }
+        logger.debug("Controller changeTaker() book.getBookTaker() - "+book.getBookTaker());
+        String res = BookDAO.saveOrUpdate(book);
+        logger.debug("Controller changeTaker() result = "+res);
+        return new ModelAndView("redirect:/books");
+    }
+
     // дебаг пользователей
     @RequestMapping(value = "/usersdebug", method = RequestMethod.GET)
     public ModelAndView showUsersDebug(ModelAndView model) throws IOException {
+        model.setViewName("usersdebug");
+        return model;
+    }
+
+    // устанавливаем пользователя для дебага
+    @RequestMapping(value = "/setdebuguser", method = RequestMethod.GET)
+    public ModelAndView setDebugUser(ModelAndView model, HttpServletRequest request, HttpSession session) {
+        session.setAttribute("sesCurUser", request.getParameter("username"));
         model.setViewName("usersdebug");
         return model;
     }
