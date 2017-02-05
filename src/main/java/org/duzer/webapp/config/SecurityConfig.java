@@ -15,11 +15,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private DataSource dataSource;
 
+/*
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth
                 .inMemoryAuthentication()
                 .withUser("user").password("pass").roles("USER");
+    }
+*/
+
+    @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        auth
+                .jdbcAuthentication()
+                    .dataSource(dataSource)
+                        .usersByUsernameQuery(
+                                "SELECT name, password FROM users WHERE name = ?"
+                        );
     }
 
     @Override

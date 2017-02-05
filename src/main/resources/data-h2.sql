@@ -2,6 +2,7 @@
 INSERT INTO users (name, password) VALUES ('Иванов','xxx');
 INSERT INTO users (name, password) VALUES ('Петров','xxx');
 INSERT INTO users (name, password) VALUES ('Сидоров','xxx');
+INSERT INTO users (name, password) VALUES ('Smith','123');
 -- filling up books table
 INSERT INTO books (ISBN, author, name) VALUES('652-3-16-148410-0', 'А.С. Пушкин', 'Евгений Онегин');
 INSERT INTO books (ISBN, author, name, takerid) VALUES('747-3-16-148410-0', 'А.С. Пушкин', 'Евгений Онегин', 3);

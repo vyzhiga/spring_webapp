@@ -209,11 +209,12 @@ public class HomeController {
             session.setAttribute("sesOrder", "ASC");
             logger.debug("Set column=Author sesOrder to ASC.");
         }
+        response.setStatus(200);
     }
 
     // сортировка по названию
     @RequestMapping(value = "/setnameorder", method = RequestMethod.GET)
-        private void setNameOrder(HttpServletResponse response) {
+        private void setNameOrder(HttpServletResponse response) throws IOException {
         logger.debug("Calling setNameOrder()");
         if (((String) session.getAttribute("sesCurOrder")).equals("BookName")) {
             // устанавливаем параметр сессии, содержащий порядок отображения наименований книг
@@ -240,6 +241,7 @@ public class HomeController {
             session.setAttribute("sesOrder", "ASC");
             logger.debug("Set column=Name sesOrder to ASC.");
         }
+        response.setStatus(200);
     }
 
     // дебаг пользователей

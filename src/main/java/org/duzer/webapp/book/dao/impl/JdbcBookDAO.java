@@ -1,6 +1,5 @@
 package org.duzer.webapp.book.dao.impl;
 
-import com.sun.org.apache.xpath.internal.operations.Or;
 import org.duzer.webapp.book.dao.BookDAO;
 import org.duzer.webapp.book.model.Book;
 import org.slf4j.Logger;
