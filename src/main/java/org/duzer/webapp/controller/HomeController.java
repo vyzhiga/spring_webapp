@@ -128,7 +128,11 @@ public class HomeController {
     // данные о книге
     @RequestMapping(value = "/getbookdetails", method = RequestMethod.GET)
     public void getBookDetails(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
+        int bookId = Integer.parseInt(request.getParameter("bookid"));
+        Book book = BookDAO.get(bookId);
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json");
+        response.getWriter().write("{\"ISBN\":\""+book.getISBNBook()+"\", \"author\":\""+book.getBookAuthor()+"\", \"name\":\"" + book.getNameBook() + "\",\"Result\":0}");
     }
 
     // обновляем информацию о пользователе
@@ -146,7 +150,14 @@ public class HomeController {
     // обновляем информацию о книге
     @RequestMapping(value = "/updatebookdetails", method = RequestMethod.GET)
     public void updateBookDetails(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
+        Book uBook = new Book();
+        uBook.setIdBook(Integer.parseInt(request.getParameter("bookid")));
+        uBook.setISBNBook(request.getParameter("newISBN"));
+        uBook.setBookAuthor(request.getParameter("newAuthor"));
+        uBook.setNameBook(request.getParameter("newName"));
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json");
+        response.getWriter().write(BookDAO.saveOrUpdate(uBook));
     }
 
 }

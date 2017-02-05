@@ -189,7 +189,8 @@
         resizable: false,
         modal: true,
         close: function() {
-            location.reload();
+            //location.reload();
+            window.location.href = "${pageContext.request.contextPath}/books";
         }
     });
 
@@ -208,10 +209,11 @@
                                 "Сохранить": function() {
                                     var newAuthor = $("#author").val();
                                     var newName = $("#name").val();
+                                    var newISBN = $("#isbn").val();
                                     if (newAuthor != "" && newName != "") {
-                                        $.get("${pageContext.request.contextPath}/updatebookdetails?bookid="+bookid+"&newAuthor="+newAuthor+"&newName="+newName,
+                                        $.get("${pageContext.request.contextPath}/updatebookdetails?bookid="+bookid+"&newISBN="+newISBN+"&newAuthor="+newAuthor+"&newName="+newName,
                                             function(data) {
-                                                if (data.Result == 1) {
+                                                if (data.Result == 0) {
                                                     alert("В данные книги внесены изменения!");
                                                 } else {
                                                     alert("Ошибка при изменении данных книги!");
