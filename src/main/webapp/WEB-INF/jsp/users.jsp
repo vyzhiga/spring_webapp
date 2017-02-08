@@ -32,7 +32,7 @@
 
 <div id="dialog" title="Добавить пользователя">
     Имя пользователя: <input type="text" id="username"><br>
-    Пароль: <input type="text" id="password">
+    Пароль: <input type="password" id="password">
 </div>
 
 <table class="usersTbl">

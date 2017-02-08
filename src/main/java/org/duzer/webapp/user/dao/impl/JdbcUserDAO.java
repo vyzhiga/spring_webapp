@@ -49,9 +49,12 @@ public class JdbcUserDAO extends JdbcDaoSupport implements UserDAO { //doesn't w
             Object[] inputs = new Object[] {user.getUserName()};
             Integer num = getJdbcTemplate().queryForObject(selectSQL, inputs, Integer.class);
             if (num == 0) {
-                String insertSQL = "INSERT INTO users (name, password) VALUES (?, ?)";
-                jdbcTemplate.update(insertSQL, user.getUserName(), user.getUserPass());
+                String insertUserSQL = "INSERT INTO users (name, password) VALUES (?, ?)";
+                jdbcTemplate.update(insertUserSQL, user.getUserName(), user.getUserPass());
                 logger.debug("Added user username:password - " + user.getUserName() + ":" + user.getUserPass() + " .");
+                String insertAuthSQL = "INSERT INTO authorities (username) VALUES (?)";
+                jdbcTemplate.update(insertAuthSQL, user.getUserName());
+                logger.debug("Added authority for user - " + user.getUserName() + ".");
                 res = "{\"Result\":0}";
             } else {
                 logger.debug("User "+user.getUserName()+" already exists. Skipping addition.");
