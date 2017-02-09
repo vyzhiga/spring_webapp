@@ -8,6 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page isELIgnored="false" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <!DOCTYPE html>
 <head>
     <meta charset="utf-8">
@@ -20,11 +21,11 @@
     <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
     <%-- определяем внешний стиль --%>
-    <link rel="stylesheet" type="text/css" href="resources/hw.css">
+    <link rel="stylesheet" type="text/css" href="css/hw.css">
 </head>
 <body>
 
-<%@ include file="/resources/header.jsp"%>
+<%@ include file="/WEB-INF/jsp/header.jsp"%>
 
 <div style="margin: 5px 0">
     <button type="button" id="opener">Добавить пользователя</button>

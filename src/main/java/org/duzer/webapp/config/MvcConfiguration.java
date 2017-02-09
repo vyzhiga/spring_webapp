@@ -38,7 +38,7 @@ public class MvcConfiguration extends WebMvcConfigurerAdapter {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
+        registry.addResourceHandler("/css/**").addResourceLocations("/css/");
         logger.debug("Initialized /resources dir.");
     }
 
@@ -46,7 +46,7 @@ public class MvcConfiguration extends WebMvcConfigurerAdapter {
     public DataSource getDataSource() {
         EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
         EmbeddedDatabase db = builder
-                .setType(EmbeddedDatabaseType.H2) //.H2 or .DERBY
+                .setType(EmbeddedDatabaseType.H2)
                 .setScriptEncoding("UTF-8")
                 .addScript("classpath:schema-h2.sql")
                 .addScript("classpath:data-h2.sql")

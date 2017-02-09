@@ -8,6 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ page isELIgnored="false" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <!DOCTYPE html>
 <head>
     <title>Книги</title>
@@ -19,12 +20,12 @@
     <script type="text/javascript" src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
     <%-- определяем внешний стиль --%>
-    <link rel="stylesheet" type="text/css" href="resources/hw.css">
+    <link rel="stylesheet" type="text/css" href="css/hw.css">
 </head>
 
 <body>
 
-<%@ include file="/resources/header.jsp"%>
+<%@ include file="/WEB-INF/jsp/header.jsp"%>
 
 <div style="margin: 5px 0">
     <input type="button" id="bookdialog" value="Добавить книгу"/>

@@ -8,6 +8,9 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ page isELIgnored="false" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
+
+<sec:authentication var="user" property="principal" />
 
 <c:forEach items="${listBook}" var="book">
     <tr>
@@ -21,18 +24,18 @@
         <%-- колонка "Кем взята" --%>
         <c:choose>
             <%-- вернуть, если пользователи совпадают --%>
-            <c:when test="${book.bookTaker==sesCurUser}">
+            <c:when test="${book.bookTaker==user.username}">
                 <td>
-                    <input type="button" value="Вернуть" onclick="jsChangeTaker(${book.idBook}, 0, '${sesCurUser}')">
+                    <input type="button" value="Вернуть" onclick="jsChangeTaker(${book.idBook}, 0, '${user.username}')">
                 </td>
             </c:when>
             <%-- взять, если книга никем не взята --%>
-            <c:when test="${book.bookTaker==null && not empty sesCurUser}">
+            <c:when test="${book.bookTaker==null && not empty user.username}">
                 <td>
-                    <input type="button" value="Взять" onclick="jsChangeTaker(${book.idBook}, 1, '${sesCurUser}')">
+                    <input type="button" value="Взять" onclick="jsChangeTaker(${book.idBook}, 1, '${user.username}')">
                 </td>
             </c:when>
-            <%-- вернуть имя пользователя, вхявшего книгу --%>
+            <%-- вернуть имя пользователя, взявшего книгу --%>
             <c:otherwise>
                 <td>
                     ${book.bookTaker}
